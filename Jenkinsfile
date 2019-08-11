@@ -1,5 +1,8 @@
 pipeline {
 	agent any 
+	environment {
+		username = "thota"
+	}
 	
 	stages {
 		stage('stage 1'){
