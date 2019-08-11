@@ -4,7 +4,7 @@ pipeline {
 		stage('stage 1'){
 			steps {
 				echo 'hello world'
-				sh 'sudo touch /home/ubuntu/test.txt'
+				powershell label: '', script: 'touch /test.txt'
 			}
 		}
 	}
