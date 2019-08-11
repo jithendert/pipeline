@@ -3,8 +3,8 @@ pipeline {
 	stages {
 		stage('stage 1'){
 			steps {
-				echo 'hello world'
-				writeFile file: 'groovy1.txt', text: 'Working with files the Groovy way is easy.'
+				def username = 'jithender'
+				writeFile file: 'groovy1.txt', text: "hello Mr.${username}"
 				sh 'ls -l groovy1.txt'
 				sh 'cat groovy1.txt'
 			}
