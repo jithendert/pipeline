@@ -23,6 +23,7 @@ pipeline {
 						sh 'echo deploying ${company}'
 					}
 				}
+				sleep 60
 				echo "hello mr.${username}"
 			}
 		}
