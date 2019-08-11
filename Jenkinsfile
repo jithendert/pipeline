@@ -12,5 +12,11 @@ pipeline {
 				sh 'cat groovy1.txt'
 			}
 		}
+		stage('stage 2'){
+			
+			steps {
+				echo "hello mr.${username}"
+			}
+		}
 	}
 }
