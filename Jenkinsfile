@@ -20,7 +20,10 @@ pipeline {
 					}
 				}
 				//sleep 60
+				echo "build number: ${BUILD_NUMBER}"
 				echo "hello mr.${env.username}"
+				echo "build number in env: ${env.BUILD_NUMBER}"
+				
 			}
 		}
 	}
