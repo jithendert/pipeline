@@ -24,7 +24,7 @@ pipeline {
 					}
 				}
 				sleep 60
-				echo "hello mr.${username}"
+				echo "hello mr.${env.username}"
 			}
 		}
 	}
