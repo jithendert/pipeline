@@ -20,7 +20,7 @@ pipeline {
 			steps {
 				timeout(time: 3, unit: 'MINUTES') {
 					retry(5) {
-						sh 'echo deploying'
+						sh 'echo deploying ${company}'
 					}
 				}
 				echo "hello mr.${username}"
