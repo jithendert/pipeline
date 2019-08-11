@@ -1,9 +1,5 @@
 pipeline {
-	agent any 
-	environment {
-		username = "thota"
-	}
-	
+	agent any 	
 	stages {
 		stage('stage 1'){
 			environment {
