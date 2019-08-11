@@ -18,6 +18,11 @@ pipeline {
 		stage('stage 2'){
 			
 			steps {
+				timeout(time: 3, unit: 'MINUTES') {
+					retry(5) {
+						sh 'echo deploying'
+					}
+				}
 				echo "hello mr.${username}"
 			}
 		}
