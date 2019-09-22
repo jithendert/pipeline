@@ -5,7 +5,7 @@ pipeline {
       echo 'hello world'
     }
     stage('stage 1'){
-      echo 'hello everyone'
+      echo 'hello there'
     }
   }
 }
