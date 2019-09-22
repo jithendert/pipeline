@@ -4,6 +4,6 @@ node {
     def customImage = docker.build("ubuntu:latest")
 
     customImage.inside {
-        sh 'touch /test.txt'
+        sh 'touch /tmp/test.txt'
     }
 }
