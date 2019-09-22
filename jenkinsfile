@@ -1,7 +1,7 @@
 node {
     stage('git pull'){
         checkout scm
-        def customImage = docker.build("ubuntu:latest", "./dockerfiles/")
+        def customImage = docker.build("ngnix:latest", "./dockerfiles/")
         customImage.inside {
             sh 'touch /tmp/test1.txt'
         }
