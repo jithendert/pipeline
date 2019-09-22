@@ -1,11 +1,9 @@
-pipeline {
-  agent any
-  stages {
-    stage('stage 1'){
-      echo 'hello world'
+node {
+    checkout scm
+
+    def customImage = docker.build("ubuntu:latest")
+
+    customImage.inside {
+        sh 'touch /test.txt'
     }
-    stage('stage 1'){
-      echo 'hello there'
-    }
-  }
 }
