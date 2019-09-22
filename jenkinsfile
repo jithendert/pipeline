@@ -1,6 +1,6 @@
 node {
     
-
+    checkout scm
     def customImage = docker.build("ubuntu:latest")
 
     customImage.inside {
