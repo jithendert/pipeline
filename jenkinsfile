@@ -3,7 +3,7 @@ node {
         checkout scm
         def customImage = docker.build("ubuntu:latest", "./dockerfiles/")
         customImage.inside {
-            sh 'touch /tmp/test.txt'
+            sh 'touch /tmp/test1.txt'
         }
      }
 }
