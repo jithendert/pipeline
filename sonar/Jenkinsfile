@@ -1,0 +1,76 @@
+#!/usr/bin/env groovy
+
+@Library('jenkinsPipelineSharedLibrary@release/pcm-1.0.15')
+import com.tieto.fs.jenkins.pipeline.steps.utility.*
+
+final boolean IS_MAIN_BRANCH = (env.BRANCH_NAME as String).equals("master")
+final String REGISTRY_URL = "https://fs-pcm-docker.maven.etb.tieto.com"
+final String REGISTRY_CREDENTIALS = "artifactory-uploader"
+final String ARTIFACT_NAME = "tieto/pcm-sonarscanner"
+
+node('infrastructure-build') {
+    notifyBitbucket()
+    docker.withRegistry(REGISTRY_URL, REGISTRY_CREDENTIALS) {
+        Integer majorVersion = 1
+        Integer minorVersion = 0
+        String newVersion
+
+        String commitId
+        def img
+
+        stage("Checkout") {
+            checkout scm
+            sshagent(credentials: ['Serviceaccount-ssh-key']) {
+	      sh 'git fetch -t'
+	    }
+            sh "git rev-parse HEAD > .git/commit-id"
+            commitId = readFile('.git/commit-id').trim()
+            println commitId
+        }
+
+        stage('Prepare') {
+
+            try {
+                newVersion = calculateNextXYZVersion(majorVersion, minorVersion)
+                println "Next delivery will be " + newVersion
+            }
+            catch (Exception e){
+		        currentBuild.result = 'FAILURE'
+	            notifyBitbucket()
+	            throw e
+            }
+        }
+
+        stage("Build") {
+            try {
+                img = docker.build("${ARTIFACT_NAME}:${commitId}")
+            }
+            catch (Exception e){
+		        currentBuild.result = 'FAILURE'
+	            notifyBitbucket()
+	            throw e
+            }
+        }
+
+        if (IS_MAIN_BRANCH && currentBuild.resultIsBetterOrEqualTo("SUCCESS")) {
+            milestone 1
+            stage("Publish") {
+                try {
+                    img.push newVersion
+                    img.push "latest"
+                    sh "git tag -a ${newVersion} -m \'${newVersion}\'"
+                        sshagent(credentials: ['Serviceaccount-ssh-key']) {
+                            sh "git push origin ${newVersion}"
+                        }
+                }
+                catch (Exception e){
+		            currentBuild.result = 'FAILURE'
+	                notifyBitbucket()
+	                throw e
+                }
+            }
+        }
+    }
+    currentBuild.result = currentBuild.result ?: 'SUCCESS'
+    notifyBitbucket()
+}
