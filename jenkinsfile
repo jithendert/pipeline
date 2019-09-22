@@ -3,6 +3,5 @@ node {
         checkout scm
         def customImage = docker.build("ngnix:latest", "./dockerfiles/")
         customImage.push()
-        }
      }
 }
