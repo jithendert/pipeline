@@ -6,7 +6,7 @@ node {
 	}
 	stage('git read commit') {
 		sh 'git rev-parse HEAD > commitid'
-		commitId = readFile('demo-pipeline/commitId')
+		commitId = readFile('commitid')
 		println(commitId)
 	}
 }
