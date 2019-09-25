@@ -1,0 +1,12 @@
+node {
+	def commitId
+	
+	stage('git pull') {
+		checkout scm
+	}
+	stage('git read commit') {
+		sh 'git rev-parse HEAD > /.git/commitid'
+		commitId = readFile('/.git/commitId')
+    println(commitId)
+	}
+}
