@@ -1,9 +1,9 @@
 #!/usr/bin/env groovy
 
 final boolean IS_MAIN_BRANCH = (env.BRANCH_NAME as String).equals("master")
-final String REGISTRY_URL = "https://fs-pcm-docker.maven.etb.tieto.com"
-final String REGISTRY_CREDENTIALS = "artifactory-uploader"
 final String ARTIFACT_NAME = "ubuntu"
+
+println "branch from which pulled: ${IS_MAIN_BRANCH}"
 
 node {
     Integer majorVersion = 1
@@ -22,7 +22,9 @@ node {
 
     stage("Build") {
         try {
+	    println "downloading the image"
             img = docker.image("${ARTIFACT_NAME}")
+	    println "completed downloading the image"
         }
         catch (Exception e){
 		        currentBuild.result = 'FAILURE'
