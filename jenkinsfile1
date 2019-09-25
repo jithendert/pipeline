@@ -1,5 +1,6 @@
 node {
 	def commitId
+	final boolean IS_MAIN_BRANCH = (env.BRANCH_NAME as String).equals("master")
 	
 	stage('git pull') {
 		checkout scm
@@ -8,6 +9,15 @@ node {
 		sh 'git rev-parse HEAD > commitid'
 		commitId = readFile('commitid')
 		println("commitid: " + commitId)
-		println(${env.GIT_PREVIOUS_SUCCESSFUL_COMMIT})
+		
 	}
+	if(IS_MAIN_BRANCH) {
+		stage('checking the branch') {
+			println("checked out from the branch: " + env.BRANCH_NAME)
+		}
+	}
+	else{
+		println("check out failed")
+	}
+	
 }
