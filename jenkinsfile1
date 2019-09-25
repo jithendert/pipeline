@@ -23,7 +23,9 @@ node {
     stage("Build") {
         try {
 	    println "downloading the image"
-            img = docker.image("${ARTIFACT_NAME}")
+            img = docker.image("${ARTIFACT_NAME}").inside {
+		    sh 'touch /tmp/test.txt'
+	    }
 	    println "completed downloading the image"
         }
         catch (Exception e){
