@@ -2,6 +2,7 @@ node {
 	def commitId
 	final boolean IS_MAIN_BRANCH = (env.BRANCH_NAME as String).equals("master")
 	println("print the branch: " + IS_MAIN_BRANCH)
+	println("checkout branch: " + env.BRANCH_NAME)
 	
 	stage('git pull') {
 		checkout scm
