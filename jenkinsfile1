@@ -7,7 +7,7 @@ node {
 	stage('git read commit') {
 		sh 'git rev-parse HEAD > commitid'
 		commitId = readFile('commitid')
-		println(commitId)
-		println(env.GIT_PREVIOUS_SUCCESSFUL_COMMIT)
+		println("commitid: " + commitId)
+		println("last commit Id: " + env.GIT_PREVIOUS_SUCCESSFUL_COMMIT)
 	}
 }
