@@ -5,8 +5,8 @@ node {
 		checkout scm
 	}
 	stage('git read commit') {
-		sh 'git rev-parse HEAD > /.git/commitid'
-		commitId = readFile('/.git/commitId')
+		sh 'git rev-parse HEAD > commitid'
+		commitId = readFile('commitId')
     println(commitId)
 	}
 }
