@@ -8,5 +8,6 @@ node {
 		sh 'git rev-parse HEAD > commitid'
 		commitId = readFile('commitid')
 		println(commitId)
+		println(GIT_PREVIOUS_SUCCESSFUL_COMMIT)
 	}
 }
