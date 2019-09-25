@@ -1,25 +1,46 @@
+#!/usr/bin/env groovy
+
+final boolean IS_MAIN_BRANCH = (env.BRANCH_NAME as String).equals("master")
+final String REGISTRY_URL = "https://fs-pcm-docker.maven.etb.tieto.com"
+final String REGISTRY_CREDENTIALS = "artifactory-uploader"
+final String ARTIFACT_NAME = "ubuntu"
+
 node {
-	def commitId
-	final boolean IS_MAIN_BRANCH = (env.BRANCH_NAME as String).equals("master")
-	println("print the branch: " + IS_MAIN_BRANCH)
-	println("checkout branch: " + env.BRANCH_NAME)
-	
-	stage('git pull') {
-		checkout scm
-	}
-	stage('git read commit') {
-		sh 'git rev-parse HEAD > commitid'
-		commitId = readFile('commitid')
-		println("commitid: " + commitId)
-		
-	}
-	if(IS_MAIN_BRANCH) {
-		stage('checking the branch') {
-			println("checked out from the branch: " + env.BRANCH_NAME)
+    Integer majorVersion = 1
+    Integer minorVersion = 0
+    String newVersion
+
+    String commitId
+    def img
+
+    stage("Checkout") {
+        checkout scm
+        sh "git rev-parse HEAD > commit-id"
+        commitId = readFile('commit-id').trim()
+        println commitId
+    }
+
+    stage("Build") {
+        try {
+            img = docker.image("${ARTIFACT_NAME}")
+        }
+        catch (Exception e){
+		        currentBuild.result = 'FAILURE'
+	            throw e
 		}
-	}
-	else{
-		println("check out failed")
-	}
-	
+    }
+
+    if (IS_MAIN_BRANCH) {
+		stage("Publish") {
+            try {
+                println "passed the test"
+			}
+            catch (Exception e){
+	            currentBuild.result = 'FAILURE'
+	            throw e
+            }
+        }
+    }
+    currentBuild.result = currentBuild.result ?: 'SUCCESS'
+    
 }
